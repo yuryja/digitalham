@@ -37,10 +37,17 @@ extern "C" int encode_ft8(const uint8_t* bits, uint8_t* out_codeword) {
     return 0;
 }
 
-extern "C" int decode_ft8(const uint8_t* codeword, uint8_t* out_bits) {
-    int* cw = (int*)codeword;
-    int msgbits[10];
-    decode174_91_(cw, msgbits);
-    std::memcpy(out_bits, msgbits, 10 * sizeof(int));
+extern "C" int gen_ft8_tones(const char* message, int* out_tones, int* tone_count) {
+    // Reuse the same logic as gen_ft8_message but only return tones.
+    char msg[13];
+    std::size_t len = std::strlen(message);
+    if (len > 13) len = 13;
+    std::memcpy(msg, message, len);
+    if (len < 13) std::memset(msg + len, ' ', 13 - len);
+    int tones[79];
+    int nTone = 0;
+    ft8code_(msg, tones, &nTone);
+    std::memcpy(out_tones, tones, nTone * sizeof(int));
+    *tone_count = nTone;
     return 0;
 }

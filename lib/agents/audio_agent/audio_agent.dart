@@ -1,82 +1,73 @@
 import 'dart:async';
-import 'dart:typed_data';
-
-import 'package:meta/meta.dart';
+import 'package:record/record.dart';
+import 'package:audio_session/audio_session.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class AudioAgent {
-  final StreamController<Uint8List> _audioStreamController =
-      StreamController<Uint8List>.broadcast();
+  final AudioRecorder _recorder = AudioRecorder();
+  StreamSubscription<Amplitude>? _amplitudeSub;
+  
+  final _amplitudeController = StreamController<double>.broadcast();
+  Stream<double> get amplitudeStream => _amplitudeController.stream;
 
-  final bool _isRecording = false;
-  final bool _isPlaying = false;
-
-  Stream<Uint8List> get audioStream => _audioStreamController.stream;
-  bool get isRecording => _isRecording;
-  bool get isPlaying => _isPlaying;
-
-  Future<bool> requestPermissions() async {
+  Future<bool> initialize() async {
+    print("[AudioAgent] Requesting microphone permission...");
     final status = await Permission.microphone.request();
-    return status.isGranted;
+    print("[AudioAgent] Permission status: $status");
+    if (status != PermissionStatus.granted) return false;
+
+    print("[AudioAgent] Configuring audio session...");
+    final session = await AudioSession.instance;
+    await session.configure(const AudioSessionConfiguration(
+      avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
+      avAudioSessionCategoryOptions: AVAudioSessionCategoryOptions.allowBluetooth,
+      avAudioSessionMode: AVAudioSessionMode.measurement,
+      androidAudioAttributes: AndroidAudioAttributes(
+        contentType: AndroidAudioContentType.music,
+        usage: AndroidAudioUsage.media,
+      ),
+      androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
+    ));
+    print("[AudioAgent] Audio session configured.");
+    
+    return true;
   }
 
-  Future<void> init() async {
-    final hasPermission = await requestPermissions();
-    if (!hasPermission) {
-      throw Exception('Microphone permission not granted');
-    }
-  }
-
-  Future<void> dispose() async {
-    await _audioStreamController.close();
-  }
-
-  Future<void> startRecording({String? filePath}) async {
-    throw UnimplementedError('Recording not supported on web');
-  }
-
-  Future<String?> stopRecording() async {
-    throw UnimplementedError('Recording not supported on web');
-  }
-
-  Future<void> playAudio(Uint8List audioData) async {
-    throw UnimplementedError('Playback not supported on web');
-  }
-
-  Future<void> playFile(String filePath) async {
-    throw UnimplementedError('Playback not supported on web');
-  }
-
-  Future<void> stopPlayback() async {
-    throw UnimplementedError('Playback not supported on web');
-  }
-
-  Future<void> playTones(List<int> tones, {int sampleRate = 12000}) async {
-    throw UnimplementedError('Playback not supported on web');
-  }
-
-  @visibleForTesting
-  List<int> tonesToSamples(List<int> tones, int sampleRate) {
-    final List<int> samples = [];
-    const symbolsPerSecond = 2.4576;
-    const symbolDuration = 1 / symbolsPerSecond;
-    final samplesPerSymbol = (sampleRate * symbolDuration).round();
-    const frequency = 1500;
-    const amplitude = 32767;
-
-    for (final tone in tones) {
-      final freq = frequency + (tone * 2.4576);
-      for (var i = 0; i < samplesPerSymbol; i++) {
-        final t = i / sampleRate;
-        final sample = (amplitude * _sin(2 * 3.14159 * freq * t)).round();
-        samples.add(sample & 0xFF);
-        samples.add((sample >> 8) & 0xFF);
+  Future<void> startMonitoring() async {
+    try {
+      print("[AudioAgent] Starting monitoring...");
+      if (await _recorder.isRecording()) {
+        print("[AudioAgent] Already recording/monitoring.");
+        return;
       }
+
+      const config = RecordConfig(encoder: AudioEncoder.pcm16bits);
+      await _recorder.start(config, path: ''); 
+      print("[AudioAgent] Recorder started.");
+      
+      _amplitudeSub = _recorder.onAmplitudeChanged(const Duration(milliseconds: 50)).listen((amp) {
+        // Log every 2 seconds to avoid flooding but see activity
+        if (DateTime.now().second % 2 == 0) {
+          // print("[AudioAgent] Current amp: ${amp.current}");
+        }
+        
+        double normal = (amp.current + 100) / 100;
+        if (normal < 0) normal = 0;
+        if (normal > 1) normal = 1;
+        _amplitudeController.add(normal);
+      });
+    } catch (e) {
+      print("[AudioAgent] Error starting monitoring: $e");
     }
-    return samples;
   }
 
-  double _sin(double x) {
-    return x - (x * x * x) / 6 + (x * x * x * x * x) / 120;
+  Future<void> stop() async {
+    await _amplitudeSub?.cancel();
+    await _recorder.stop();
+  }
+
+  void dispose() {
+    _amplitudeController.close();
+    _recorder.dispose();
   }
 }
