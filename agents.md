@@ -25,9 +25,8 @@
 | Agent | Responsibility | Skills / Dependencies |
 |-------|----------------|------------------------|
 | **SignalAgent** | Generate/decoding FT8/FT4/FT2 (FFT, LDPC, timing) | libft8 (C/C++) via FFI, FFT, LDPC, timing, Dart FFI |
-| **AudioAgent** | Audio capture and playback, filtering, gain control | audio_record, audio_player, DSP (filters), stream handling |
+| **AudioAgent** | Audio capture and playback, filtering, gain control | record, just_audio, DSP (filters), stream handling |
 | **StorageAgent** | Persist logs and contacts, export/import (CSV, ADIF, JSON) | Drift + sqlcipher, exporters, importers |
-| **SyncAgent** | Optional cloud synchronization (Firebase/Firestore) | Firestore offline‑first, conflict resolution, workmanager |
 | **UIAgent** | UI/UX (dark theme, accessibility, hot‑reload) | Flutter theming, responsive layout, accessibility |
 | **IntegrationAgent** | Consume external APIs (QRZ, HamQTH, DXCluster, propagation) | dio, web_socket_channel, OAuth/ApiKey, JSON parsing |
 | **SecurityAgent** | Permission handling, encryption, data validation | permission_handler, flutter_secure_storage, TLS pinning |
@@ -44,16 +43,17 @@
 - **fastlane** – build automation.
 - **flutter_test, integration_test, mockito** – testing.
 - **flutter_secure_storage** – secure credential storage.
-- **cloud_firestore** – cloud database with offline mode.
 - **intl** – date/time formatting.
 - **url_launcher** – share results.
+- **record** – audio recording.
+- **just_audio** – audio playback.
 
 ## Roadmap and Milestones (tentative)
 | Phase | Duration | Goal |
 |-------|----------|------|
 | **Setup** | 1 week | Repo configuration, CI, base architecture. |
 | **MVP (Core)** | 4 weeks | Implement SignalAgent + AudioAgent, basic UI, local storage. |
-| **Sync & Export** | 3 weeks | Add SyncAgent (Firestore) and export/import ADIF/CSV. |
+| **Export** | 2 weeks | Add export/import ADIF/CSV, local backup. |
 | **External Integrations** | 3 weeks | Connect to QRZ, HamQTH, DXCluster and share results. |
 | **Advanced UI/UX** | 2 weeks | Dark theme, accessibility, continuous hot‑reload. |
 | **Public Beta** | 2 weeks | Release to TestFlight / Google Play internal testing, collect feedback. |

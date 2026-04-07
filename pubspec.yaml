@@ -31,35 +31,38 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  ffi: ^2.1.0
   drift: ^2.8.0
   drift_sqflite: ^2.0.0
-  flutter_sound: ^9.2.13
+  record: ^5.0.5
+
+  # Audio packages for mobile (uncomment when building for iOS/Android):
+  # just_audio: ^0.9.39
+  # audio_session: ^0.1.21
+  # flutter_sound: ^9.10.0
+
   dio: ^5.4.0
   web_socket_channel: ^2.4.0
   flutter_bloc: ^8.1.5
   provider: ^6.1.4
   workmanager: ^0.5.0
   permission_handler: ^11.3.2
+  meta: ^1.11.0
   path: ^1.9.0
   path_provider: ^2.1.4
-
-  cloud_firestore: ^5.0.0
   intl: ^0.19.0
   url_launcher: ^6.2.6
+  flutter_secure_storage: ^9.2.2
+  sqlite3_flutter_libs: ^0.5.24
+  sqlcipher_flutter_libs: ^0.6.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^6.0.0
+  drift_dev: ^2.8.0
+  build_runner: ^2.4.8
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

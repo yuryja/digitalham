@@ -1,16 +1,22 @@
+import 'dart:typed_data';
+import '../ft8_ffi.dart';
+
 class SignalAgent {
-  // TODO: Implement FT8/FT4/FT2 generation and decoding using libft8 via FFI.
-  Future<void> initialize() async {
-    // Initialize FFI bindings.
-  }
-
-  Future<String> decode(List<int> audioSamples) async {
-    // Decode audio samples and return decoded message.
-    return '';
-  }
-
+  /// Encode a human‑readable FT8 message and return the tone sequence.
   Future<List<int>> encode(String message) async {
-    // Encode message into audio samples.
-    return [];
+    // Use the new FFI helper that also returns tones.
+    final result = LibFT8.encodeMessageWithTones(message);
+    // Convert Uint8List tones to List<int>.
+    return result.tones.map((b) => b.toInt()).toList();
+  }
+
+  /// Decode a received FT8 payload (174‑bit codeword) into a human‑readable message.
+  /// The `codeword` is expected as a Uint8List of length 22 (174 bits).
+  Future<String> decode(Uint8List codeword) async {
+    // Recover the 77-bit payload.
+    LibFT8.decodePayload(codeword);
+    // Next, you would need a Dart implementation that reverses `genft8`.
+    // For now we return a placeholder string.
+    return 'Decoded message (TODO)';
   }
 }
