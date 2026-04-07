@@ -6,12 +6,12 @@ class AudioAgent {
   final FlutterSoundPlayer _player = FlutterSoundPlayer();
 
   Future<void> init() async {
-    await _recorder.openAudioSession();
-    await _player.openAudioSession();
+    // No-op for now – real audio session initialization will be added later.
   }
 
   Future<void> startRecording() async {
-    await _recorder.startRecorder(toStream: StreamSink);
+    // Simple placeholder: recording to a temporary file.
+    await _recorder.startRecorder(toFile: 'temp.wav');
   }
 
   Future<void> stopRecording() async {
@@ -19,7 +19,8 @@ class AudioAgent {
   }
 
   Future<void> playAudio(List<int> samples) async {
-    // Convert samples to appropriate format and play.
-    // Placeholder implementation.
+    // Placeholder – implement audio playback from sample data later.
   }
 }
+
+

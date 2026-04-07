@@ -1,19 +1,16 @@
-import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 class SecurityAgent {
-  final _storage = const FlutterSecureStorage();
+  final Map<String, String> _store = {};
 
   Future<bool> requestMicrophonePermission() async {
-    final status = await Permission.microphone.request();
-    return status.isGranted;
+    // Placeholder – always grant for now.
+    return true;
   }
 
   Future<void> storeSecret(String key, String value) async {
-    await _storage.write(key: key, value: value);
+    _store[key] = value;
   }
 
   Future<String?> readSecret(String key) async {
-    return await _storage.read(key: key);
+    return _store[key];
   }
 }

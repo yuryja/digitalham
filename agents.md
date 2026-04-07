@@ -18,6 +18,8 @@
 - **Future integrations**: design is open for adding modes such as **RTTY** or others.
 - **Research**: if a question arises, **consult the internet**; do not assume knowledge without verification.
 - **Commit blocks**: changes will be grouped into **important code blocks**; I will ask before each commit.
+- **Compilation must be clean**: the project must compile without errors before any hot‑reload is performed.
+- **Static analysis**: `flutter analyze` must report zero warnings or errors before merging.
 
 ## Agents and Responsibilities
 | Agent | Responsibility | Skills / Dependencies |

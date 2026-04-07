@@ -5,3 +5,4 @@ class UIAgent {
   ThemeData get lightTheme => ThemeData.light();
   ThemeData get darkTheme => ThemeData.dark();
 }
+
