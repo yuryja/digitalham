@@ -38,4 +38,4 @@ If you find this project useful, consider supporting its development:
 - PayPal: https://www.paypal.me/yuryja
 
 ## License
-This project is private and not intended for publishing on pub.dev. Feel free to use it as a reference or adapt it for your own needs.
+This project is released under the MIT License. See the [LICENSE](LICENSE) file for details.
