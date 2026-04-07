@@ -1,63 +1,63 @@
-# agents.md – Hoja de ruta para la app móvil de codificación FT8/FT4/FT2 (Flutter)
+# agents.md – Roadmap for the FT8/FT4/FT2 coding mobile app (Flutter)
 
-## Visión general
-- Aplicación **multiplataforma** (Android + iOS) desarrollada con **Flutter**.
-- Código **reutilizable y bien estructurado**, con **pruebas exhaustivas** antes de cualquier commit.
-- Utiliza **Hot Reload** siempre que sea posible para acelerar el desarrollo.
-- **Seguridad**: datos sensibles encriptados u ofuscados, la app **no guarda datos fuera del dispositivo** salvo sincronización opcional cifrada.
-- **Rendimiento**: bajo consumo de batería, latencia adecuada sin límites estrictos.
-- **Extensibilidad**: preparada para futuras integraciones (p.ej., RTTY, otros modos).
+## Vision
+- **Cross‑platform** (Android + iOS) app built with **Flutter**.
+- **Reusable, well‑structured** code with comprehensive tests before any commit.
+- **Hot Reload** used whenever possible to speed development.
+- **Security**: sensitive data is encrypted or obfuscated; the app does **not store data outside the device** except optional encrypted cloud sync.
+- **Performance**: low battery consumption, reasonable latency without hard limits.
+- **Extensibility**: ready for future integrations (e.g., RTTY, other modes).
 
-## Reglas operativas (Rules)
-- **Código reutilizable y bien estructurado**: seguir arquitectura limpia (layers) con separación clara entre UI, dominio y datos.
-- **Pruebas**: todo el código debe estar **bien probado** (unit, integration y UI) antes de subir al repositorio.
-- **Hot Reload**: usar siempre que sea posible para acelerar iteraciones.
-- **Commits en inglés**: mensajes claros siguiendo Conventional Commits (`feat:`, `fix:`, `refactor:`).
-- **Privacidad de datos**: la app **no guarda datos fuera del dispositivo**; cualquier dato sensible se almacena **encriptado o ofuscado**.
-- **Consumo de batería**: la app **no debe drenar batería** (optimizar procesos en background, uso de audio y señal). No se establecen límites estrictos, pero se busca eficiencia.
-- **Futuras integraciones**: diseño abierto para añadir modos como **RTTY** u otros.
-- **Investigación**: si surge una duda, **consultar en internet**; no asumir conocimiento sin verificar.
-- **Commits por bloques**: los cambios se agruparán en **bloques de código importante**; el asistente preguntará al usuario antes de realizar cada commit.
+## Operational Rules
+- **Reusable, well‑structured code**: follow a clean architecture (layers) with clear separation between UI, domain and data.
+- **Testing**: all code must be **well tested** (unit, integration, UI) before pushing.
+- **Hot Reload**: always use when possible to accelerate iterations.
+- **Commits in English**: clear messages following Conventional Commits (`feat:`, `fix:`, `refactor:`).
+- **Data privacy**: the app **does not store data outside the device**; any sensitive data is stored **encrypted or obfuscated**.
+- **Battery consumption**: the app **must not drain the battery**; optimise background processing, audio and signal handling. No strict limits, but efficiency is a goal.
+- **Future integrations**: design is open for adding modes such as **RTTY** or others.
+- **Research**: if a question arises, **consult the internet**; do not assume knowledge without verification.
+- **Commit blocks**: changes will be grouped into **important code blocks**; I will ask before each commit.
 
-## Agentes y responsibilities
-| Agente | Responsabilidad | Skills / Dependencias |
-|--------|----------------|-----------------------|
-| **SignalAgent** | Generar/decodificar FT8/FT4/FT2 (FFT, LDPC, sincronización) | libft8 (C/C++) vía FFI, FFT, LDPC, temporización, Dart FFI
-| **AudioAgent** | Captura y reproducción de audio, filtrado y ganancia | audio_record, audio_player, DSP (filtros), manejo de streams
-| **StorageAgent** | Persistir logs y contactos, exportar/importar (CSV, ADIF, JSON) | Drift + sqlcipher, exportadores, importadores
-| **SyncAgent** | Sincronización opcional con nube (Firebase/Firestore) | Firestore offline‑first, conflict resolution, workmanager
-| **UIAgent** | UI/UX (tema oscuro, accesibilidad, hot‑reload) | Flutter theming, responsive layout, accessibility
-| **IntegrationAgent** | Consumir APIs externas (QRZ, HamQTH, DXCluster, predicción) | dio, web_socket_channel, OAuth/ApiKey, JSON parsing
-| **SecurityAgent** | Gestión de permisos, encriptación, validación de datos | permission_handler, flutter_secure_storage, TLS pinning
-| **TestAgent** | Ejecutar suite de pruebas (unit, integration, UI) | flutter_test, integration_test, mockito, coverage
-| **CICDAgent** | Pipeline CI/CD (lint, tests, builds) | GitHub Actions, fastlane, dart lint, codecov
+## Agents and Responsibilities
+| Agent | Responsibility | Skills / Dependencies |
+|-------|----------------|------------------------|
+| **SignalAgent** | Generate/decoding FT8/FT4/FT2 (FFT, LDPC, timing) | libft8 (C/C++) via FFI, FFT, LDPC, timing, Dart FFI |
+| **AudioAgent** | Audio capture and playback, filtering, gain control | audio_record, audio_player, DSP (filters), stream handling |
+| **StorageAgent** | Persist logs and contacts, export/import (CSV, ADIF, JSON) | Drift + sqlcipher, exporters, importers |
+| **SyncAgent** | Optional cloud synchronization (Firebase/Firestore) | Firestore offline‑first, conflict resolution, workmanager |
+| **UIAgent** | UI/UX (dark theme, accessibility, hot‑reload) | Flutter theming, responsive layout, accessibility |
+| **IntegrationAgent** | Consume external APIs (QRZ, HamQTH, DXCluster, propagation) | dio, web_socket_channel, OAuth/ApiKey, JSON parsing |
+| **SecurityAgent** | Permission handling, encryption, data validation | permission_handler, flutter_secure_storage, TLS pinning |
+| **TestAgent** | Run test suite (unit, integration, UI) | flutter_test, integration_test, mockito, coverage |
+| **CICDAgent** | CI/CD pipeline (lint, tests, builds) | GitHub Actions, fastlane, dart lint, codecov |
 
-## Skills reutilizables
-- **libft8 (C/C++)** – algoritmo de referencia WSJT‑X.
-- **Drift + sqlcipher** – ORM SQLite con cifrado.
-- **dio** – cliente HTTP con interceptores y retries.
-- **web_socket_channel** – comunicación WebSocket.
-- **flutter_bloc / provider** – gestión de estado.
-- **workmanager** – tareas en background.
-- **fastlane** – automatización de builds.
-- **flutter_test, integration_test, mockito** – pruebas.
-- **flutter_secure_storage** – almacenamiento seguro de credenciales.
-- **cloud_firestore** – base de datos en la nube con modo offline.
-- **intl** – formateo de fechas/horas.
-- **url_launcher** – compartir resultados.
+## Reusable Skills
+- **libft8 (C/C++)** – reference WSJT‑X algorithm.
+- **Drift + sqlcipher** – encrypted SQLite ORM.
+- **dio** – HTTP client with interceptors and retries.
+- **web_socket_channel** – WebSocket communication.
+- **flutter_bloc / provider** – state management.
+- **workmanager** – background tasks.
+- **fastlane** – build automation.
+- **flutter_test, integration_test, mockito** – testing.
+- **flutter_secure_storage** – secure credential storage.
+- **cloud_firestore** – cloud database with offline mode.
+- **intl** – date/time formatting.
+- **url_launcher** – share results.
 
-## Roadmap y hitos (tentativo)
-| Fase | Duración | Objetivo |
-|------|-----------|----------|
-| **Setup** | 1 semana | Configuración de repo, CI, arquitectura base. |
-| **MVP (Core)** | 4 semanas | Implementar SignalAgent + AudioAgent, UI básica, almacenamiento local. |
-| **Sync & Export** | 3 semanas | Añadir SyncAgent (Firestore) y export/import ADIF/CSV. |
-| **Integraciones externas** | 3 semanas | Conectar a QRZ, HamQTH, DXCluster y compartir resultados. |
-| **UI/UX avanzada** | 2 semanas | Tema oscuro, accesibilidad, hot‑reload continuo. |
-| **Beta pública** | 2 semanas | Release a TestFlight / Google Play Internal Testing, feedback. |
-| **Lanzamiento oficial** | 1 semana | Publicación en App Store y Play Store (v1.0.0). |
+## Roadmap and Milestones (tentative)
+| Phase | Duration | Goal |
+|-------|----------|------|
+| **Setup** | 1 week | Repo configuration, CI, base architecture. |
+| **MVP (Core)** | 4 weeks | Implement SignalAgent + AudioAgent, basic UI, local storage. |
+| **Sync & Export** | 3 weeks | Add SyncAgent (Firestore) and export/import ADIF/CSV. |
+| **External Integrations** | 3 weeks | Connect to QRZ, HamQTH, DXCluster and share results. |
+| **Advanced UI/UX** | 2 weeks | Dark theme, accessibility, continuous hot‑reload. |
+| **Public Beta** | 2 weeks | Release to TestFlight / Google Play internal testing, collect feedback. |
+| **Official Launch** | 1 week | Publish to App Store and Play Store (v1.0.0). |
 
-> **Notas**: Los commits se harán por bloques de código importante; se preguntará al usuario antes de cada commit.
+> **Note**: Commits will be made in important code blocks; I will ask before each commit.
 
 ---
-*Generado por Claude Code.*
+*Generated by Claude Code.*
